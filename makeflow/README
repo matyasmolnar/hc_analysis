@@ -1,0 +1,95 @@
+# online guide: http://hera.pbworks.com/w/page/124165410/Makeflow%20example
+
+Installation
+------------
+
+The software stack is python3 compatible. We typically use anaconda to manage
+python environments and install prereqs. Assuming you already have a conda
+environment at hand, run:
+
+$ conda install numpy scipy astropy h5py toml six matplotlib scikit-learn cached-property
+
+Then install additional dependencies from conda-forge:
+
+$ conda install -c conda-forge pyuvdata aipy healpy
+
+Finally, install these HERA-specific repos (unfortunately order matters...):
+
+$ pip install git+https://github.com/HERA-Team/pyuvdata.git
+$ pip install git+https://github.com/HERA-Team/linsolve.git
+$ pip install git+https://github.com/HERA-Team/hera_qm.git
+$ pip install git+https://github.com/HERA-Team/uvtools.git
+$ pip install git+https://github.com/HERA-Team/hera_cal.git
+$ git clone https://github.com/HERA-Team/hera_opm.git
+
+The last repo, hera_opm, should be cloned rather than straight installed,
+because it contains the bash scripts used in executing the workflow. Once
+cloned, it should be installed with `python setup.py install`.
+
+Once those are installed, make sure makeflow is installed:
+
+
+# N.B. Doing the below installation will download latest version of cctools, which may be a development version!!!
+# This causes the generation of the below workflow to fail -  instead I installed cctools with conda
+# through this command:
+# $ conda install -y -c conda-forge ndcctools
+# see https://cctools.readthedocs.io/en/latest/install/
+# N.B.B Not sure that this was the reason that the generation failed - had to rm -rf hera_opm* from site-packages for hera env 
+# this then worked - however this still used the conda installed version of cctools (makeflow version 7.0.21)
+# now retrying with the latest version of pyuvdata (cloned from github)...
+
+$ git clone https://github.com/cooperative-computing-lab/cctools.git
+$ cd cctools
+$ ./configure --prefix=${HOME}/cctools
+$ make clean
+$ make install
+$ export PATH=${PATH}:${HOME}/cctools/bin
+
+
+Generating and Running a Workflow
+---------------------------------
+
+Now, we'll use tools from hera_opm to define and build a workflow, the execution
+of which will be handled by makeflow (via the Torque/Slurm/HTCondor scheduler).
+The main task script is `build_makeflow_from_config.py`, which makes a makeflow
+file and associated bash scripts. Once the makeflow file is made, makeflow will
+handle the actual execution.
+
+Navigate to the test directory and make sure the relevant files are in place.
+
+$ cd /lustre/aoc/projects/hera/mmolnar/makeflow_sample
+
+There should be a `raw_data` folder with 2 raw HERA data files, and a `makeflow`
+folder, which has in it `idr2_2.toml`. Before continuing, several options should
+be changed in the TOML file in the [Options] section, such as the email address
+to send Torque mail to, the name of the conda environment to activate, and the
+`path_to_do_scripts` and `ex_ants_path` options to point to relevant locations.
+
+The first step is to make the workflow and bash scripts for each raw data file:
+
+$ pwd
+/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow
+$ build_makeflow_from_config.py -c idr2_2.toml /lustre/aoc/projects/hera/mmolnar/makeflow_sample/raw_data/zen.2458098.43869.HH.uvh5
+
+$ build_makeflow_from_config.py -c idr2_2.toml /lustre/aoc/projects/hera/mmolnar/makeflow_sample/raw_data/zen.2458098.44615.HH.uvh5
+Generating makeflow file from config file idr2_2.toml for obsids ../raw_data/zen.2458098.45361.HH.uvh5
+
+This will make a bunch of files that start `wrapper_`, and `idr2_2.toml`. To
+actually run the workflow, do:
+
+
+# following executes the makeflow, and sends me an email when it is done
+$ ./makeflow_test.sh idr2_2.mf
+# $ nohup ./makeflow_test.sh idr2_2.mf &
+# to keep running even if I exit terminal
+# otherwise can also use disown %job_no after ctrl+z
+
+# alternatively:
+# $ makeflow_nrao.sh idr2_2.mf
+
+That's it! You should now see (copious) logs of the makeflow execution process.
+
+# to conveniently clean up working directory
+$ clean_up_makeflow.py
+# also remove .makeflowlog file that can be problematic when re-running further processes if there was an error during workflow
+$ rm -rf *.makeflowlog

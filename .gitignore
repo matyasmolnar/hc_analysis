@@ -1,0 +1,8 @@
+.ipynb_checkpoints
+__pycache__/
+*.out
+*.log
+*.makeflowlog
+*test*
+data/
+wrapper*.sh

@@ -1,0 +1,6 @@
+# makeflow file generated from config file idr2_2_redcal.toml
+# created at 04:55:00 on 09 January 2020
+export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
+zen.2458098.45361.HH.uvh5.REDCAL.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_REDCAL.sh
+	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.45361.HH.uvh5.REDCAL.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.45361.HH.uvh5.REDCAL.log 2>&1
+
