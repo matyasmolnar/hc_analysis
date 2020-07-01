@@ -1,4 +1,8 @@
-# online guide: http://hera.pbworks.com/w/page/124165410/Makeflow%20example
+# makeflow guide
+
+Also see:
+online guide: http://hera.pbworks.com/w/page/124165410/Makeflow%20example
+
 
 Installation
 ------------
@@ -27,7 +31,6 @@ because it contains the bash scripts used in executing the workflow. Once
 cloned, it should be installed with `python setup.py install`.
 
 Once those are installed, make sure makeflow is installed:
-
 
 # N.B. Doing the below installation will download latest version of cctools, which may be a development version!!!
 # This causes the generation of the below workflow to fail -  instead I installed cctools with conda
