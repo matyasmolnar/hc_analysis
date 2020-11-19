@@ -1,6 +1,7 @@
 """Utility functions for the calibration notebooks of this repository"""
 
 
+import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -36,7 +37,9 @@ def waterfall_column(waterfalls, flags, titles, ylabel, clims=None, clabels=None
     plt.show()
 
 
-def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3), dpi=100):
+def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3), \
+             dpi=100):
+    """Plot visibility amplitude or phase"""
     if vcomp == 'amp':
         label = 'Amplitude'
         vcalc = np.absolute
@@ -55,3 +58,36 @@ def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3)
     plt.title(title + ': ' + str(bl))
     plt.colorbar(label=label, aspect=8, pad=.025)
     plt.show()
+
+
+def plot_reds(data, redbls, cbarlabel, vcomp='phase', pol='ee', ncol=3, \
+              style_ctxt='seaborn-white', figsize=(12, 8)):
+    """Grid plot of visibilities at the different calibration stages"""
+    if vcomp == 'amp':
+        label = 'Amplitude'
+        vcalc = np.absolute
+    elif vcomp == 'phase':
+        label = 'Phase (Radians)'
+        vcalc = np.angle
+        vmax = None
+    else:
+        raise ValueError('Specify either {"amp", "phase"} for vcomp')
+    with plt.style.context((style_ctxt)): # use dark_background for white text
+        fig, axes = plt.subplots(int(np.ceil(len(redbls)/ncol)), ncol, sharex=True, \
+                                 sharey=True, figsize =figsize)
+        for i,(bl, ax) in enumerate(zip(redbls, axes.flatten())):
+            im = ax.imshow(vcalc(data[bl]), cmap='inferno', aspect='auto', \
+                           extent=[100,200,51,0])
+            ax.text(101-.2,48-.7,str(bl), color='k', fontsize=16)
+            ax.text(101,48,str(bl), color='w', fontsize=16)
+            if i >= len(axes.flatten())-ncol:
+                ax.set_xlabel('Frequency (MHz)', size=14)
+            ax.set_yticks([])
+            ax.tick_params(labelsize=14)
+        plt.tight_layout()
+        cbar = fig.colorbar(im,  ax=axes.ravel().tolist(), orientation='horizontal', \
+                            label=cbarlabel, aspect=40)
+        cbar.ax.xaxis.label.set_font_properties(matplotlib.font_manager.\
+                                                FontProperties(size=14))
+        cbar.ax.tick_params(labelsize=14)
+        plt.show()
