@@ -6,6 +6,25 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
+def ex_badants(data, bad_ants):
+    """Zero data from bad baselines"""
+    for (i, j, pol) in data.keys():
+        if i in bad_ants or j in bad_ants:
+            data[(i, j, pol)] = np.zeros_like(data[(i, j, pol)])
+    return data
+
+
+def apply_mask(data, flags=None, edge_cut=100):
+    """Mask data brom band edges and flags"""
+    im_delta = -1-1e-16j
+    for bl in data.keys():
+        data[bl][:, :edge_cut] = im_delta
+        data[bl][:, -edge_cut:] = im_delta
+        if flags is not None:
+            data[bl][flags[bl]] = im_delta
+    return data
+
+
 def waterfall_column(waterfalls, flags, titles, ylabel, clims=None, clabels=None, cmaps=None, \
                      ylims=None, extents=None, hspace=.1, figsize=(12,6), dpi=100):
     """Useful plotting function for the IDR2.2 memorandum"""
@@ -60,7 +79,7 @@ def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3)
     plt.show()
 
 
-def plot_reds(data, redbls, cbarlabel, vcomp='phase', pol='ee', ncol=3, \
+def plot_reds(data, redbls, cbarlabel, vcomp='phase', bad_bls=None, ncol=3, \
               style_ctxt='seaborn-white', figsize=(12, 8)):
     """Grid plot of visibilities at the different calibration stages"""
     if vcomp == 'amp':
@@ -75,17 +94,28 @@ def plot_reds(data, redbls, cbarlabel, vcomp='phase', pol='ee', ncol=3, \
     with plt.style.context((style_ctxt)): # use dark_background for white text
         fig, axes = plt.subplots(int(np.ceil(len(redbls)/ncol)), ncol, sharex=True, \
                                  sharey=True, figsize =figsize)
-        for i,(bl, ax) in enumerate(zip(redbls, axes.flatten())):
+        for i, (bl, ax) in enumerate(zip(redbls, axes.flatten())):
+            # To make black subplot
+            vmin = -np.pi
+            if bad_bls is not None:
+                if bl in bad_bls:
+                    vmin=np.pi
             im = ax.imshow(vcalc(data[bl]), cmap='inferno', aspect='auto', \
-                           extent=[100,200,51,0])
-            ax.text(101-.2,48-.7,str(bl), color='k', fontsize=16)
-            ax.text(101,48,str(bl), color='w', fontsize=16)
-            if i >= len(axes.flatten())-ncol:
+                           extent=[100, 200, 51, 0], vmin=vmin, vmax=np.pi)
+            ax.text(101-.2, 48-.7, str(bl), color='k', fontsize=16)
+            ax.text(101, 48, str(bl), color='w', fontsize=16)
+            if i >= len(axes.flatten()) - ncol:
                 ax.set_xlabel('Frequency (MHz)', size=14)
             ax.set_yticks([])
             ax.tick_params(labelsize=14)
+            # To get correct cbar range
+            if bad_bls is not None:
+                if bl not in bad_bls:
+                    cim = im
+            else:
+                cim = im
         plt.tight_layout()
-        cbar = fig.colorbar(im,  ax=axes.ravel().tolist(), orientation='horizontal', \
+        cbar = plt.colorbar(cim, ax=axes.ravel().tolist(), orientation='horizontal', \
                             label=cbarlabel, aspect=40)
         cbar.ax.xaxis.label.set_font_properties(matplotlib.font_manager.\
                                                 FontProperties(size=14))
