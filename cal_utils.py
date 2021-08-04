@@ -79,29 +79,41 @@ def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3)
     plt.show()
 
 
-def plot_reds(data, redbls, cbarlabel, vcomp='phase', bad_bls=None, ncol=3, \
-              style_ctxt='seaborn-white', figsize=(12, 8)):
+def plot_reds(data, redbls, cbarlabel, flags=None, vcomp='phase', bad_bls=None, \
+              ncol=3, style_ctxt='seaborn-white', figsize=(12, 8)):
     """Grid plot of visibilities at the different calibration stages"""
     if vcomp == 'amp':
         label = 'Amplitude'
         vcalc = np.absolute
+        vmin = None
+        vmax = None
     elif vcomp == 'phase':
         label = 'Phase (Radians)'
         vcalc = np.angle
-        vmax = None
+        vmin = -np.pi
+        vmax = np.pi
     else:
-        raise ValueError('Specify either {"amp", "phase"} for vcomp')
+        raise ValueError('Specify either {"amp", "phase"} for vcomp.')
+
     with plt.style.context((style_ctxt)): # use dark_background for white text
         fig, axes = plt.subplots(int(np.ceil(len(redbls)/ncol)), ncol, sharex=True, \
                                  sharey=True, figsize =figsize)
         for i, (bl, ax) in enumerate(zip(redbls, axes.flatten())):
             # To make black subplot
-            vmin = -np.pi
-            if bad_bls is not None:
-                if bl in bad_bls:
-                    vmin=np.pi
-            im = ax.imshow(vcalc(data[bl]), cmap='inferno', aspect='auto', \
-                           extent=[100, 200, 51, 0], vmin=vmin, vmax=np.pi)
+            if bad_bls is not None and bl in bad_bls:
+                vmin_ = np.pi
+            else:
+                vmin_ = vmin
+
+            data_bl = vcalc(data[bl])
+            if flags is not None:
+                data_bl_ = data_bl.copy()
+                data_bl_[flags[bl]] = vmin
+            else:
+                data_bl_ = data_bl
+
+            im = ax.imshow(data_bl_, cmap='inferno', aspect='auto', \
+                           extent=[100, 200, 51, 0], vmin=vmin_, vmax=vmax)
             ax.text(101-.2, 48-.7, str(bl), color='k', fontsize=16)
             ax.text(101, 48, str(bl), color='w', fontsize=16)
             if i >= len(axes.flatten()) - ncol:
