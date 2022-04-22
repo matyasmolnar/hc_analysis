@@ -80,7 +80,7 @@ def plot_vis(data, flags, hd, JD, bl, vcomp, title=None, vmax=.1, figsize=(12,3)
 
 
 def plot_reds(data, redbls, cbarlabel, flags=None, vcomp='phase', bad_bls=None, \
-              ncol=3, style_ctxt='seaborn-white', figsize=(12, 8)):
+              ncol=3, savefig=None, txt_colour='black', figsize=(12, 8)):
     """Grid plot of visibilities at the different calibration stages"""
     if vcomp == 'amp':
         label = 'Amplitude'
@@ -95,41 +95,59 @@ def plot_reds(data, redbls, cbarlabel, flags=None, vcomp='phase', bad_bls=None, 
     else:
         raise ValueError('Specify either {"amp", "phase"} for vcomp.')
 
-    with plt.style.context((style_ctxt)): # use dark_background for white text
-        fig, axes = plt.subplots(int(np.ceil(len(redbls)/ncol)), ncol, sharex=True, \
-                                 sharey=True, figsize =figsize)
-        for i, (bl, ax) in enumerate(zip(redbls, axes.flatten())):
-            # To make black subplot
-            if bad_bls is not None and bl in bad_bls:
-                vmin_ = np.pi
-            else:
-                vmin_ = vmin
+    fig, axes = plt.subplots(int(np.ceil(len(redbls)/ncol)), ncol, sharex=True, \
+                             sharey=True, figsize =figsize)
 
-            data_bl = vcalc(data[bl])
-            if flags is not None:
-                data_bl_ = data_bl.copy()
-                data_bl_[flags[bl]] = vmin
-            else:
-                data_bl_ = data_bl
+    for i, (bl, ax) in enumerate(zip(redbls, axes.flatten())):
 
-            im = ax.imshow(data_bl_, cmap='inferno', aspect='auto', \
-                           extent=[100, 200, 51, 0], vmin=vmin_, vmax=vmax)
-            ax.text(101-.2, 48-.7, str(bl), color='k', fontsize=16)
-            ax.text(101, 48, str(bl), color='w', fontsize=16)
-            if i >= len(axes.flatten()) - ncol:
-                ax.set_xlabel('Frequency (MHz)', size=14)
-            ax.set_yticks([])
-            ax.tick_params(labelsize=14)
-            # To get correct cbar range
-            if bad_bls is not None:
-                if bl not in bad_bls:
-                    cim = im
-            else:
+        # To make black subplots for flagged baselines
+        if bad_bls is not None and bl in bad_bls:
+            vmin_ = np.pi
+        else:
+            vmin_ = vmin
+
+        data_bl = vcalc(data[bl])
+        if flags is not None:
+            data_bl_ = data_bl.copy()
+            data_bl_[flags[bl]] = vmin
+        else:
+            data_bl_ = data_bl
+
+        im = ax.imshow(data_bl_, cmap='inferno', aspect='auto', \
+                       extent=[100, 200, 51, 0], vmin=vmin_, vmax=vmax, \
+                       interpolation='None', rasterized=savefig is not None)
+
+        # baseline annotation in each plot
+        ax.text(101-.2, 48-.7, str(bl), color='k', fontsize=16)
+        ax.text(101, 48, str(bl), color='w', fontsize=16)
+
+        if i >= len(axes.flatten()) - ncol:
+            ax.set_xlabel('Frequency (MHz)', size=14, color=txt_colour)
+
+        ax.set_yticks([])
+        ax.tick_params(labelsize=14, colors=txt_colour)
+
+        # To get correct cbar range
+        if bad_bls is not None:
+            if bl not in bad_bls:
                 cim = im
-        plt.tight_layout()
-        cbar = plt.colorbar(cim, ax=axes.ravel().tolist(), orientation='horizontal', \
-                            label=cbarlabel, aspect=40)
-        cbar.ax.xaxis.label.set_font_properties(matplotlib.font_manager.\
-                                                FontProperties(size=14))
-        cbar.ax.tick_params(labelsize=14)
-        plt.show()
+        else:
+            cim = im
+
+        ax.spines['bottom'].set_color(txt_colour)
+        ax.spines['top'].set_color(txt_colour)
+        ax.spines['right'].set_color(txt_colour)
+        ax.spines['left'].set_color(txt_colour)
+
+    plt.tight_layout()
+
+    # colour bar
+    cbar = plt.colorbar(cim, ax=axes.ravel().tolist(), orientation='horizontal', \
+                        aspect=40)
+    cbar.set_label(label=cbarlabel, fontsize=14, color=txt_colour)
+    cbar.ax.tick_params(labelsize=14, colors=txt_colour)
+
+    if savefig is not None:
+        plt.savefig(savefig, bbox_inches='tight')
+
+    plt.show()
