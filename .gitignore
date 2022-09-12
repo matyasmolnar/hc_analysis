@@ -2,8 +2,12 @@
 __pycache__/
 *.out
 *.log
+*.log.error
 *.makeflowlog
+*.mf
 *test*
 data/
 wrapper*.sh
 sample_calib/
+*torque.status*
+*torque.wrapper*

@@ -9,22 +9,22 @@ base_cpu = 1
 timeout = "24h"
 pbs_mail_user = "mdm49@cam.ac.uk"
 
-[REDCAL_OPTS]
-ant_z_thresh = 4.0
-solar_horizon = 0.0
-nInt_to_load = 8
-flag_nchan_low = 50
-flag_nchan_high = 50
-min_bl_cut = 15
-max_bl_cut = 90
+[DELAY_OPTS]
+partial_load_Nbls = 100
+standoff = 15
+horizon = 1
+tol = 1e-9
+window = "tukey"
+skip_wgt = 0.1
+maxiter = 100
+alpha = 0.5
 
 ############################################################################################################
 
 [WorkFlow]
-actions = ["REDCAL"]
+actions = ["DELAY"]
 
-[REDCAL]
-args = ["{basename}", "${Options:ex_ants_path}", "${REDCAL_OPTS:ant_z_thresh}",
-        "${REDCAL_OPTS:solar_horizon}", "${REDCAL_OPTS:flag_nchan_low}",
-        "${REDCAL_OPTS:flag_nchan_high}", "${REDCAL_OPTS:nInt_to_load}",
-        "${REDCAL_OPTS:min_bl_cut}", "${REDCAL_OPTS:max_bl_cut}"]
+[DELAY]
+args = ["{basename}", "${DELAY_OPTS:partial_load_Nbls}", "${DELAY_OPTS:standoff}",
+        "${DELAY_OPTS:horizon}", "${DELAY_OPTS:tol}", "${DELAY_OPTS:window}",
+        "${DELAY_OPTS:skip_wgt}", "${DELAY_OPTS:maxiter}", "${DELAY_OPTS:alpha}"]
