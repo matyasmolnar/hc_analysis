@@ -1,50 +1,50 @@
 # makeflow file generated from config file idr2_2.toml
-# created at 04:05:45 on 10 January 2020
+# created at 16:39:20 on 11 January 2021
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.EXTRACT_AUTOS.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_EXTRACT_AUTOS.sh
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.EXTRACT_AUTOS.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.EXTRACT_AUTOS.log 2>&1
+zen.2458099.43124.HH.uvh5.EXTRACT_AUTOS.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_EXTRACT_AUTOS.sh
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.EXTRACT_AUTOS.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.EXTRACT_AUTOS.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.REDCAL.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_REDCAL.sh zen.2458098.43869.HH.uvh5.EXTRACT_AUTOS.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.REDCAL.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.REDCAL.log 2>&1
+zen.2458099.43124.HH.uvh5.REDCAL.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_REDCAL.sh
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.REDCAL.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.REDCAL.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.FIRSTCAL_METRICS.out: zen.2458098.43869.HH.uvh5.REDCAL.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_FIRSTCAL_METRICS.sh
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.FIRSTCAL_METRICS.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.FIRSTCAL_METRICS.log 2>&1
+zen.2458099.43124.HH.uvh5.FIRSTCAL_METRICS.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_FIRSTCAL_METRICS.sh zen.2458099.43124.HH.uvh5.REDCAL.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.FIRSTCAL_METRICS.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.FIRSTCAL_METRICS.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.ABSCAL.out: zen.2458098.43869.HH.uvh5.REDCAL.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_ABSCAL.sh zen.2458098.43869.HH.uvh5.FIRSTCAL_METRICS.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.ABSCAL.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.ABSCAL.log 2>&1
+zen.2458099.43124.HH.uvh5.ABSCAL.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_ABSCAL.sh zen.2458099.43124.HH.uvh5.REDCAL.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.ABSCAL.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.ABSCAL.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=32000M,mem=32000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.XRFI.out: zen.2458098.43869.HH.uvh5.ABSCAL.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_XRFI.sh
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.XRFI.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.XRFI.log 2>&1
+zen.2458099.43124.HH.uvh5.XRFI.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_XRFI.sh zen.2458099.43124.HH.uvh5.ABSCAL.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.XRFI.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.XRFI.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.XRFI_DAY_THRESHOLD.out: zen.2458098.43869.HH.uvh5.XRFI.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_XRFI_DAY_THRESHOLD.sh zen.2458098.43869.HH.uvh5.XRFI.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.XRFI_DAY_THRESHOLD.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.XRFI_DAY_THRESHOLD.log 2>&1
+zen.2458099.43124.HH.uvh5.XRFI_DAY_THRESHOLD.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_XRFI_DAY_THRESHOLD.sh zen.2458099.43124.HH.uvh5.XRFI.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.XRFI_DAY_THRESHOLD.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.XRFI_DAY_THRESHOLD.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=32000M,mem=32000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out: zen.2458098.43869.HH.uvh5.XRFI_DAY_THRESHOLD.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_CAL_SMOOTH.sh zen.2458098.43869.HH.uvh5.XRFI_DAY_THRESHOLD.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.CAL_SMOOTH.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.CAL_SMOOTH.log 2>&1
+zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_CAL_SMOOTH.sh zen.2458099.43124.HH.uvh5.XRFI_DAY_THRESHOLD.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.CAL_SMOOTH.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.CAL_SMOOTH.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.UPDATE_OMNISOL.out: zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_UPDATE_OMNISOL.sh zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.UPDATE_OMNISOL.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.UPDATE_OMNISOL.log 2>&1
+zen.2458099.43124.HH.uvh5.UPDATE_OMNISOL.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_UPDATE_OMNISOL.sh zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.UPDATE_OMNISOL.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.UPDATE_OMNISOL.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.NOISE.out: zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_NOISE.sh zen.2458098.43869.HH.uvh5.UPDATE_OMNISOL.out zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.NOISE.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.NOISE.log 2>&1
+zen.2458099.43124.HH.uvh5.NOISE.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_NOISE.sh zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.NOISE.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.NOISE.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.REFLECTIONS.out: zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_REFLECTIONS.sh zen.2458098.43869.HH.uvh5.NOISE.out zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.REFLECTIONS.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.REFLECTIONS.log 2>&1
+zen.2458099.43124.HH.uvh5.REFLECTIONS.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_REFLECTIONS.sh zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.REFLECTIONS.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.REFLECTIONS.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=32000M,mem=32000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.IMAGING.out: zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_IMAGING.sh zen.2458098.43869.HH.uvh5.REFLECTIONS.out zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.IMAGING.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.IMAGING.log 2>&1
+zen.2458099.43124.HH.uvh5.IMAGING.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_IMAGING.sh zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.IMAGING.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.IMAGING.log 2>&1
 
 export BATCH_OPTIONS = -l vmem=8000M,mem=8000M,nodes=1:ppn=1 -q hera
-zen.2458098.43869.HH.uvh5.DELAY.out: zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_DELAY.sh zen.2458098.43869.HH.uvh5.IMAGING.out zen.2458098.43869.HH.uvh5.CAL_SMOOTH.out
-	/lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/wrapper_zen.2458098.43869.HH.uvh5.DELAY.sh > /lustre/aoc/projects/hera/mmolnar/makeflow_sample/makeflow/zen.2458098.43869.HH.uvh5.DELAY.log 2>&1
+zen.2458099.43124.HH.uvh5.DELAY.out: /users/heramgr/hera_software/hera_opm/pipelines/h1c/idr2/v2/task_scripts/do_DELAY.sh zen.2458099.43124.HH.uvh5.CAL_SMOOTH.out
+	/lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/wrapper_zen.2458099.43124.HH.uvh5.DELAY.sh > /lustre/aoc/projects/hera/mmolnar/hc_analysis/makeflow/makeflow/zen.2458099.43124.HH.uvh5.DELAY.log 2>&1
 
